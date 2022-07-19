@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import ToggleColorMode from './components/common/ToggleColorMode';
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
+import ToggleColorMode from './components/ToggleColorMode';
 
 function App() {
   const [mode, setMode] = useState('light');
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <main>
         <ToggleColorMode mode={mode} setMode={setMode}/>
         <p>Mode: {mode}</p>
