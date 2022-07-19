@@ -1,15 +1,15 @@
-import * as React from 'react';
+import React, {useState, useMemo, useContext, createContext} from 'react';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function MyApp() {
   const theme = useTheme();
-  const colorMode = React.useContext(ColorModeContext);
+  const colorMode = useContext(ColorModeContext);
   return (
     <Box
       sx={{
@@ -33,8 +33,8 @@ function MyApp() {
 }
 
 export default function ToggleColorMode() {
-  const [mode, setMode] = React.useState('light');
-  const colorMode = React.useMemo(
+  const [mode, setMode] = useState('light');
+  const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
@@ -43,7 +43,7 @@ export default function ToggleColorMode() {
     [],
   );
 
-  const theme = React.useMemo(
+  const theme = useMemo(
     () =>
       createTheme({
         palette: {
