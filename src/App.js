@@ -1,63 +1,23 @@
-import React, {useState, useMemo, useContext, createContext} from 'react';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import React, { useState } from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import ToggleColorMode from './components/common/ToggleColorMode';
 
-const ColorModeContext = createContext({ toggleColorMode: () => {} });
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
-function MyApp() {
-  const theme = useTheme();
-  const colorMode = useContext(ColorModeContext);
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bgcolor: 'background.default',
-        color: 'text.primary',
-        borderRadius: 1,
-        p: 3,
-      }}
-    >
-              <h1>I love my mom</h1>
-      {theme.palette.mode} mode
-      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
-    </Box>
-  );
-}
-
-export default function ToggleColorMode() {
+function App() {
   const [mode, setMode] = useState('light');
-  const colorMode = useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-      },
-    }),
-    [],
-  );
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode],
-  );
-
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <MyApp />
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <ThemeProvider theme={darkTheme}>
+      <main>
+        <ToggleColorMode mode={mode} setMode={setMode}/>
+        <p>Mode: {mode}</p>
+      </main>
+    </ThemeProvider>
   );
 }
+
+export default App;
