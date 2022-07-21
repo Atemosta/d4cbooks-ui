@@ -13,17 +13,18 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Badge from '@mui/material/Badge';
 
 // Icon Imports
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import UpgradeIcon from '@mui/icons-material/Upgrade';
 import imgAvatar from '../assets/avatar.png'
 
-const Navbar = ({address, mode, setMode}) => {
+const Navbar = ({address, setAddress, mode, setMode}) => {
   const pages = ['Create', 'View', 'Configure'];
   const settings = ['Login', 'Account', 'Upgrade', 'Theme', 'Logout'];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -151,11 +152,13 @@ const Navbar = ({address, mode, setMode}) => {
           </Box>
           
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Account Avatar" src={imgAvatar} />
-              </IconButton>
-            </Tooltip>
+            <Badge variant="dot" color="error">
+              <Tooltip title="Profile Settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Account Avatar" src={imgAvatar} />
+                </IconButton>
+              </Tooltip>              
+            </Badge>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -175,26 +178,21 @@ const Navbar = ({address, mode, setMode}) => {
               
               { // eslint-disable-next-line
               settings.map((setting) => {
-                if (!address && setting === "Login") {
-                  return (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <LoginIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  )
-                } 
                 if (address && setting === "Account") {
                   return (
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
                       <AccountBalanceWalletIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                      <Typography textAlign="center">{setting}: asdfasfasdf</Typography>
+                      <Typography textAlign="center">{setting}: {address.slice(0, 6)}...{address.slice(-4)}</Typography>
                     </MenuItem>
                   )
                 }             
                 if (address && setting === "Upgrade") {
                   return (
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">Upgrade to Premium</Typography>
+                      <UpgradeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                      <Badge variant="dot" color="error">
+                        <Typography textAlign="center">Upgrade to Premium</Typography>
+                      </Badge>
                     </MenuItem>
                   )
                 }  
@@ -208,7 +206,7 @@ const Navbar = ({address, mode, setMode}) => {
                 }   
                  if (address && setting === "Logout") {
                   return (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem key={setting} onClick={() => setAddress(null)}>
                       <LogoutIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>

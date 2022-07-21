@@ -28,10 +28,10 @@ function App() {
       <ThemeProvider theme={theme}>
       <CssBaseline />
         <main mode={mode} setMode={setMode}>
-          <Navbar address={address} mode={mode} setMode={setMode}/>
+          <Navbar address={address} setAddress={setAddress} mode={mode} setMode={setMode}/>
           { address 
-          ? <div></div>
-          : <ConnectWallet/>
+          ? <div>HACKER VOICE: I'm In</div>
+          : <ConnectWallet setAddress={setAddress}/>
           }
         </main>
       </ThemeProvider>

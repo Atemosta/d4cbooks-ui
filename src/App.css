@@ -4,6 +4,19 @@
   text-align: center;
 }
 
+.cta-button {
+  height: 45px;
+  border: 0;
+  width: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
 .connect-wallet-button {
   background-image: linear-gradient(
     to right,
@@ -16,6 +29,33 @@
   );
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
+}
+
+.connect-wallet-button-divider-left {
+  border-top: 1px solid white;
+  width: 45%;
+  float:left;
+}
+
+.connect-wallet-button-divider-right {
+  border-top: 1px solid white;
+  width: 45%;
+  float:right;
+}
+
+.connect-wallet-button-social {
+  color: white;
+  background: -webkit-linear-gradient(left, #67aeff, #5255ff);
+  background-size: 200% 200%;
+  max-width: 300px;
+}
+
+.connect-wallet-button-web3 {
+  color: white;
+  background: transparent;
+  background-size: 200% 200%;
+  max-width: 300px;
+  border: 1px solid white;
 }
 
 .connect-wallet-container {
@@ -34,19 +74,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.cta-button {
-  height: 45px;
-  border: 0;
-  width: auto;
-  padding-left: 40px;
-  padding-right: 40px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
 }
 
 .header {
