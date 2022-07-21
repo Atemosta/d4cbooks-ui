@@ -26,17 +26,9 @@ function App() {
 
   // Render Content when Connected
   const renderContent = () => {
-    if (location === "create") {
-      return (
-        <div>
-          Create Expenses
-        </div>
-      );
-    } else if (location === "view") {
-      return(<div>View Expenses</div>);
-    } else if (location === "configure") {
-      return(<div>Configure Expenses</div>);
-    }
+    if      (location === "create") {return (<CreateExpense/>);} 
+    else if (location === "view") {return(<div>View Expenses</div>);} 
+    else if (location === "configure") {return(<div>Configure Expenses</div>);}
   };
 
   return (
