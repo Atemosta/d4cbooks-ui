@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 
+// Style Imports
+import '../styles/ConnectWallet.css'
+
 // Web3 Imports
 // import Torus from "@toruslabs/torus-embed";
 // import Web3 from "web3";

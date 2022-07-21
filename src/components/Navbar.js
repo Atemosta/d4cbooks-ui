@@ -24,9 +24,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import imgAvatar from '../assets/avatar.png'
 
-const Navbar = ({address, setAddress, mode, setMode}) => {
-  const pages = ['Create', 'View', 'Configure'];
-  const settings = ['Login', 'Account', 'Upgrade', 'Theme', 'Logout'];
+// Config Imports
+import { pages, settings } from "../config";
+
+const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -37,8 +38,9 @@ const Navbar = ({address, setAddress, mode, setMode}) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page) => {
     setAnchorElNav(null);
+    setLocation(page);
   };
 
   const handleCloseUserMenu = () => {
@@ -110,7 +112,7 @@ const Navbar = ({address, setAddress, mode, setMode}) => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -142,7 +144,7 @@ const Navbar = ({address, setAddress, mode, setMode}) => {
               pages.map((page) => (
                 <Button
                   key={page}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => handleCloseNavMenu(page)}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {page}

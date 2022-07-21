@@ -1,5 +1,5 @@
 # Dirty Deeds Done Dirt Cheap (D4C) Books
-![d4c jojo stand](assets/d4c.webp)
+![d4c jojo stand](src/assets/d4c.webp)
 
 Web3 Expense and Warranty Tracker. 
 

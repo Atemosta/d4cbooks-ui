@@ -3,14 +3,15 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
   ConnectWallet,
+  CreateExpense,
   Navbar,
   // ToggleColorMode
 } from './components'
-import './App.css';
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
   const [address, setAddress] = useState(null);
+  const [location, setLocation] = useState('create');
   const [mode, setMode] = useState('dark');
   const colorMode = useContext(ColorModeContext);
   const theme = useMemo(
@@ -23,14 +24,29 @@ function App() {
     [mode],
   );
 
+  // Render Content when Connected
+  const renderContent = () => {
+    if (location === "create") {
+      return (
+        <div>
+          Create Expenses
+        </div>
+      );
+    } else if (location === "view") {
+      return(<div>View Expenses</div>);
+    } else if (location === "configure") {
+      return(<div>Configure Expenses</div>);
+    }
+  };
+
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
       <CssBaseline />
         <main mode={mode} setMode={setMode}>
-          <Navbar address={address} setAddress={setAddress} mode={mode} setMode={setMode}/>
+          <Navbar address={address} setAddress={setAddress} setLocation={setLocation} mode={mode} setMode={setMode}/>
           { address 
-          ? <div>HACKER VOICE: I'm In</div>
+          ? renderContent()
           : <ConnectWallet setAddress={setAddress}/>
           }
         </main>
