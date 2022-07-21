@@ -1,4 +1,6 @@
 import * as React from 'react';
+
+// Navbar Imports
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,12 +13,19 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+
+// Icon Imports
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 import imgAvatar from '../assets/avatar.png'
 
-const Navbar = ({mode, setMode}) => {
-  const pages = ['Create', 'View', 'Defaults'];
-  const settings = ['Account', 'Theme', 'Logout'];
+const Navbar = ({address, mode, setMode}) => {
+  const pages = ['Create', 'View', 'Configure'];
+  const settings = ['Login', 'Account', 'Upgrade', 'Theme', 'Logout'];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -35,11 +44,14 @@ const Navbar = ({mode, setMode}) => {
     setAnchorElUser(null);
   };
 
+  const flipTheme = () => {
+    return (mode === 'light' ? 'dark' : 'light');
+
+  };
+
   const handleThemeMode = () => {
     console.log("im in color mode!!");
-    const flipTheme = (mode === 'light' ? 'dark' : 'light');
-    console.log(flipTheme);
-    setMode(flipTheme);
+    setMode(flipTheme());
     handleCloseUserMenu();
   };
 
@@ -47,7 +59,7 @@ const Navbar = ({mode, setMode}) => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <AutoStoriesIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -66,7 +78,7 @@ const Navbar = ({mode, setMode}) => {
             D4CBooks
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>                      {/* Render Left Side of Navbar When Logged In */}
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -77,6 +89,7 @@ const Navbar = ({mode, setMode}) => {
             >
               <MenuIcon />
             </IconButton>
+            { address &&
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -101,8 +114,9 @@ const Navbar = ({mode, setMode}) => {
                 </MenuItem>
               ))}
             </Menu>
+            }
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <AutoStoriesIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -121,18 +135,21 @@ const Navbar = ({mode, setMode}) => {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+          {/* Render Left Side of Navbar When Logged In */}
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            { address && 
+              pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page}
+                </Button>
+              ))
+            }
           </Box>
-
+          
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -158,27 +175,45 @@ const Navbar = ({mode, setMode}) => {
               
               { // eslint-disable-next-line
               settings.map((setting) => {
-                if (setting === "Account") {
+                if (!address && setting === "Login") {
                   return (
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <LoginIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  )
+                } 
+                if (address && setting === "Account") {
+                  return (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <AccountBalanceWalletIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                       <Typography textAlign="center">{setting}: asdfasfasdf</Typography>
                     </MenuItem>
                   )
-                }
-                else if (setting === "Theme") {
-                  return (
-                    <MenuItem key={setting} onClick={handleThemeMode}>
-                      <Typography textAlign="center" style={{textTransform: "capitalize"}}>{setting}: {mode}</Typography>
-                    </MenuItem>   
-                  )         
-                }
-                else if (setting === "Logout") {
+                }             
+                if (address && setting === "Upgrade") {
                   return (
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">Upgrade to Premium</Typography>
+                    </MenuItem>
+                  )
+                }  
+                if (setting === "Theme") {
+                  return (
+                    <MenuItem key={setting} onClick={handleThemeMode}>
+                      { mode === 'dark'? <Brightness7Icon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> : <Brightness4Icon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />}
+                      <Typography textAlign="center" style={{textTransform: "capitalize"}}>Switch to {flipTheme()} Mode</Typography>
+                    </MenuItem>   
+                  )         
+                }   
+                 if (address && setting === "Logout") {
+                  return (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <LogoutIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                   )       
-                }     
+                }      
               })}
             </Menu>
           </Box>
