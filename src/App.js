@@ -1,13 +1,15 @@
 import React, { useState, useMemo, useContext, createContext } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import ToggleColorMode from './components/ToggleColorMode';
 import CssBaseline from '@mui/material/CssBaseline';
-
+import {
+  Navbar,
+  // ToggleColorMode
+} from './components'
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
   const colorMode = useContext(ColorModeContext);
-  const [mode, setMode] = useState('light');
+  const [mode, setMode] = useState('dark');
   const theme = useMemo(
     () =>
       createTheme({
@@ -22,8 +24,9 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
       <CssBaseline />
-        <main>
-          <ToggleColorMode mode={mode} setMode={setMode}/>
+        <main mode={mode} setMode={setMode}>
+          <Navbar mode={mode} setMode={setMode}/>
+          {/* <ToggleColorMode mode={mode} setMode={setMode}/> */}
           <p>Mode: {mode}</p>
         </main>
       </ThemeProvider>
