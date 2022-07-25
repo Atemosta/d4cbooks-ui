@@ -136,7 +136,7 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            D4CBooks
           </Typography>
           {/* Render Left Side of Navbar When Logged In */}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

@@ -13,8 +13,7 @@ async function getExpenses(address){
       "Content-Type" : "application/json",
       },
     })
-    .then(response => appData = response)
-    console.log(appData)
+    .then(response => appData = response.data)
     return appData
   } catch (error) {
     console.log(error.response);

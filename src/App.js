@@ -5,6 +5,7 @@ import {
   ConnectWallet,
   CreateExpense,
   InfoBox,
+  LoadingIndicator,
   Navbar,
   // ToggleColorMode
   ViewExpenses
@@ -22,7 +23,8 @@ const ColorModeContext = createContext({ toggleColorMode: () => {} });
 function App() {
   const [address, setAddress] = useState(null);
   const [expenses, setExpenses] = useState([]);
-  const [location, setLocation] = useState('create');
+  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState('Create');
   const [mode, setMode] = useState('dark');
   const colorMode = useContext(ColorModeContext);
   const theme = useMemo(
@@ -35,18 +37,32 @@ function App() {
     [mode],
   );
 
+  const fetchExpenses = async () => {
+    try {
+      const tempExpenses = await getExpenses(address);
+      console.log(tempExpenses);
+      setExpenses(tempExpenses);
+    } catch (error) {
+      console.log("Error in App/fetchExpenses()");
+      console.log(error);
+    }
+  };
+
+
   useEffect(() => {
     if (address) {
-      const tempExpenses = await getExpenses(address);
-      console.log(tempExpeses);
-      setExpenses(tempExpenses);
+      setLoading(true);
+      fetchExpenses();
+      setLoading(false);
     }
+  // eslint-disable-next-line
   }, [address]);
 
   // Render Content when Connected
   const renderContent = () => {
-    if      (location === "create") {return (<CreateExpense/>);} 
-    else if (location === "view") {
+    if (loading) {return (<center><LoadingIndicator/></center>);} 
+    else if (location === "Create") {return (<CreateExpense/>);} 
+    else if (location === "View") {
       if (expenses.length > 0) {return(<ViewExpenses data={expenses} setData={setExpenses}/>);}
       else {return(
         <InfoBox 
@@ -56,7 +72,7 @@ function App() {
           setLocation={setLocation}/>
       )} 
     }
-    else if (location === "configure") {return(<div>Configure Expenses</div>);}
+    else if (location === "Configure") {return(<div>Configure Expenses</div>);}
   };
 
   return (
