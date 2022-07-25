@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext, createContext } from 'react';
+import React, { createContext, useEffect, useMemo, useContext, useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
@@ -9,6 +9,14 @@ import {
   // ToggleColorMode
   ViewExpenses
 } from './components'
+
+// Import API Calls
+import getExpenses from './api/getExpenses';
+
+// Import Images
+import imgWrite from './assets/gif/write.gif'
+
+// Theme Settings
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
@@ -27,6 +35,14 @@ function App() {
     [mode],
   );
 
+  useEffect(() => {
+    if (address) {
+      const tempExpenses = await getExpenses(address);
+      console.log(tempExpeses);
+      setExpenses(tempExpenses);
+    }
+  }, [address]);
+
   // Render Content when Connected
   const renderContent = () => {
     if      (location === "create") {return (<CreateExpense/>);} 
@@ -36,7 +52,7 @@ function App() {
         <InfoBox 
           maintext="You have not created any expenses!"
           subtext="Click on the image or button below to create your first expense."
-          image="https://i.pinimg.com/originals/38/5b/e5/385be5861cc8475fe78683b161fec4ce.gif"
+          image={imgWrite}
           setLocation={setLocation}/>
       )} 
     }
