@@ -4,13 +4,16 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {
   ConnectWallet,
   CreateExpense,
+  InfoBox,
   Navbar,
   // ToggleColorMode
+  ViewExpenses
 } from './components'
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
   const [address, setAddress] = useState(null);
+  const [expenses, setExpenses] = useState([]);
   const [location, setLocation] = useState('create');
   const [mode, setMode] = useState('dark');
   const colorMode = useContext(ColorModeContext);
@@ -27,7 +30,16 @@ function App() {
   // Render Content when Connected
   const renderContent = () => {
     if      (location === "create") {return (<CreateExpense/>);} 
-    else if (location === "view") {return(<div>View Expenses</div>);} 
+    else if (location === "view") {
+      if (expenses.length > 0) {return(<ViewExpenses data={expenses} setData={setExpenses}/>);}
+      else {return(
+        <InfoBox 
+          maintext="You have not created any expenses!"
+          subtext="Click on the image or button below to create your first expense."
+          image="https://i.pinimg.com/originals/38/5b/e5/385be5861cc8475fe78683b161fec4ce.gif"
+          setLocation={setLocation}/>
+      )} 
+    }
     else if (location === "configure") {return(<div>Configure Expenses</div>);}
   };
 
