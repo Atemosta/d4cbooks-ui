@@ -106,10 +106,11 @@ const ViewExpenses = ({data, setData}) => {
   return (
     <div>
       <header className={styles.header_list}>
-        <h1 style={{ color: 'white' }}>🧾 List of Expenses</h1>
+        <h1 style={{ color: 'white', textAlign: 'center' }}>🧾 List of Expenses</h1>
       </header>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 240}}>
+      <center>
+      <Paper sx={{ width: '95%', overflow: 'hidden'}}>
+        <TableContainer sx={{ maxHeight: 800}}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
             <TableRow>
@@ -156,7 +157,7 @@ const ViewExpenses = ({data, setData}) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-
+      </center>
       {/* Dialog Component */}
       { open && <ExpenseDetail data={dialog} setData={setData} open={open} setOpen={setOpen} /> }
     </div>

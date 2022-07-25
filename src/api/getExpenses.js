@@ -3,7 +3,6 @@ import getApiEndPoint from './getApiEndPoint';
 
 async function getExpenses(address){
   const apiURL = getApiEndPoint() + '/expenses?address=' + address;
-  console.log(apiURL);
   try {
     var appData; 
     await axios({

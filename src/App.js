@@ -39,9 +39,10 @@ function App() {
 
   const fetchExpenses = async () => {
     try {
+      console.log("Fetching Address Expenses...")
       const tempExpenses = await getExpenses(address);
-      console.log(tempExpenses);
       setExpenses(tempExpenses);
+      console.log("Successfully Fetched Expenses!")
     } catch (error) {
       console.log("Error in App/fetchExpenses()");
       console.log(error);
