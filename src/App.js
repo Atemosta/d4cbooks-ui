@@ -62,7 +62,7 @@ function App() {
   // Render Content when Connected
   const renderContent = () => {
     if (loading) {return (<center><LoadingIndicator/></center>);} 
-    else if (location === "Create") {return (<CreateExpense/>);} 
+    else if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses}/>);} 
     else if (location === "View") {
       if (expenses.length > 0) {return(<ViewExpenses data={expenses} setData={setExpenses}/>);}
       else {return(
