@@ -49,7 +49,6 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
 
   const flipTheme = () => {
     return (mode === 'light' ? 'dark' : 'light');
-
   };
 
   const handleThemeMode = () => {

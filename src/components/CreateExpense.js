@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Webcam from "react-webcam";
-import styles from "../styles/CreateExpense.css";
-// import { SLS_URL } from '../config';
+import "../styles/CreateExpense.css";
 
 const CreateExpense = ({address, data, setData}) => {
+  const FACING_MODE_USER = "user";
+  const FACING_MODE_ENVIRONMENT = "environment"
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -15,8 +16,18 @@ const CreateExpense = ({address, data, setData}) => {
 
   // Setup Webcam Component
   const WebcamCapture = () => {
+    const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
     const webcamRef = React.useRef(null);
-    
+
+    const flip = React.useCallback(() => {
+      setFacingMode(
+        prevState =>
+          prevState === FACING_MODE_USER
+            ? FACING_MODE_ENVIRONMENT
+            : FACING_MODE_USER
+      );
+    }, []);
+
     const capture = React.useCallback(() => {
       const imageSrc = webcamRef.current.getScreenshot();
       setImgSrc(imageSrc);
@@ -27,11 +38,12 @@ const CreateExpense = ({address, data, setData}) => {
     };
 
     const videoConstraints = {
-      facingMode: { exact: "environment" }
+      facingMode: facingMode,
     };
   
     return (
       <div>
+        <center>
         { imgSrc === null 
         ? 
         <Webcam
@@ -42,10 +54,13 @@ const CreateExpense = ({address, data, setData}) => {
         />
         : <img src={imgSrc} alt={"Snapshot Taken"}/>
         }
-        <center>
           { imgSrc === null 
-          ? <button onClick={(e)=>{ e.preventDefault(); capture();}} className={styles.input}>Capture Photo</button>
-          : <button onClick={(e)=> { e.preventDefault(); reset();}} className={styles.input}> Retake Photo </button>
+          ? <div>
+          <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
+          <br/>
+          <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input">Capture Photo</button>
+          </div> 
+          : <button onClick={(e)=> { e.preventDefault(); reset();}} className="input"> Retake Photo </button>
           }
         </center>
       </div>
@@ -110,27 +125,27 @@ const CreateExpense = ({address, data, setData}) => {
   };
 
   return (
-    <div className={styles.create_expense_container}>
-      <div className={styles.create_product_form}>
-        <header className={styles.header}>
-          <h1>📝 Create New Expense</h1>
+    <div className="create_expense_container">
+      <div className="create_product_form">
+        <header className="header">
+          <div>📝 Create New Expense</div>
         </header>
 
-        <div className={styles.form_container}>
+        <div className="form_container">
           
           <WebcamCapture/>
 
-          <div className={styles.flex_row}>
+          <div className="flex_row">
             <input
-              className={styles.input}
+              className="input"
               type="text"
-              placeholder="Product Name"
+              placeholder="Expense Name"
               onChange={(e) => {
                 setNewProduct({ ...newProduct, name: e.target.value });
               }}
             />
             <input
-              className={styles.input}
+              className="input"
               type="number"
               placeholder="Price (USD)"
               onChange={(e) => {
@@ -139,9 +154,9 @@ const CreateExpense = ({address, data, setData}) => {
             />
           </div>
           
-          <div className={styles.flex_row}>
+          <div className="flex_row">
             <input
-              className={styles.input}
+              className="input"
               type="text"
               placeholder="Expense Type"
               onChange={(e) => {
@@ -149,7 +164,7 @@ const CreateExpense = ({address, data, setData}) => {
               }}
             />
             <input
-              className={styles.input}
+              className="input"
               type="text"
               placeholder="Purchase Source"
               onChange={(e) => {
@@ -159,13 +174,13 @@ const CreateExpense = ({address, data, setData}) => {
           </div>
           
           <button
-            className={styles.button}
+            className="button"
             onClick={() => {
               createExpense();
             }}
             disabled={loading}
           >
-            Create Expense
+            { loading ? "Submitting Expense..." : "Create Expense" } 
           </button>
         </div>
       </div>

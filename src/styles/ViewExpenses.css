@@ -1,13 +1,13 @@
 .header {
   text-align: center;
-  background-image: url(../assets/blur-bg.png);
+  /* background-image: url(../assets/blur-bg.png); */
   padding: 0 150px;
   border-radius: 10px 10px 0 0;
 }
 
 .header_list {
   text-align: center;
-  background-image: url(../assets/blur-bg.png);
+  /* background-image: url(../assets/blur-bg.png); */
   padding: 1px;
   border-radius: 10px 10px 0 0;
 }
