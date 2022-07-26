@@ -106,7 +106,7 @@ const ViewExpenses = ({data, setData}) => {
   return (
     <div>
       <header className={styles.header_list}>
-        <h1 style={{ color: 'white', textAlign: 'center' }}>🧾 List of Expenses</h1>
+        <h1 style={{ textAlign: 'center' }}>🧾 List of Expenses</h1>
       </header>
       <center>
       <Paper sx={{ width: '95%', overflow: 'hidden'}}>

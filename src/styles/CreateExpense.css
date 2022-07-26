@@ -47,7 +47,7 @@
 }
 
 .create_product_form {
-  color: white;
+  /* color: white; */
   display: flex;
   flex-direction: column;
 }
