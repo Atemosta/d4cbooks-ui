@@ -5,6 +5,7 @@ import Webcam from "react-webcam";
 
 // Internal Imports
 import createExpense from "../api/createExpense";
+import updateExpensePhoto from "../api/updateExpensePhoto";
 
 // Styles Import
 import "../styles/CreateExpense.css";
@@ -87,35 +88,31 @@ const CreateExpense = ({address, data, setData}) => {
         const response1 = await createExpense(expense);
         console.log(response1);
         // If Expense Details created successfully, append image
-        // if (response1.status === 201) {
-        //   const response2 = await fetch(`../api/updateExpensePhotoSLS?id=${data1.id}&address=${address}`, {
-        //     method: "PATCH",
-        //     headers: {
-        //       "Content-Type": "text/plain",
-        //     },
-        //     body: imgSrc,
-        //   });
-        //   const data2 = await response2.json();
-        //   if (response2.status === 200) {
-        //     alert("Product added!");
-        //     const dataNew = data;
-        //     dataNew.push(expense);
-        //     setData(dataNew);
-        //     setNewProduct({
-        //       name: "",
-        //       price: "",
-        //       expense_type: "",
-        //       purchase_source: "",
-        //     })
-        //   }
-          // else {
-          //   alert("Expense data added, but photo upload failed. Please try again.", data2.error);
-          // }
+        if (response1.status === 201) {
+          const expenseId = response1.data.id;
+          const response2 = await updateExpensePhoto(address, expenseId, imgSrc);
+          console.log(response2);
+          if (response2.status === 200) {
+            alert("New expense created!");
+            const expenseWithPhotoURL = response2.data;
+            const dataNew = data;
+            dataNew.push(expenseWithPhotoURL);
+            setData(dataNew);
+            setNewProduct({
+              name: "",
+              price: "",
+              expense_type: "",
+              purchase_source: "",
+            })
+          }
+          else {
+            alert("Expense data added, but photo upload failed. Please try again.");
+          }
         }
-        // else{
-        //   alert("Unable to add expense: ", data1.error);
-        // }
-      // } 
+        else{
+          alert("Unable to create expense. Please try again.");
+        }
+      } 
       catch (error) {
         console.log(error);
       } 
@@ -177,7 +174,7 @@ const CreateExpense = ({address, data, setData}) => {
             onClick={() => submitExpense()}
             disabled={loading}
           >
-            Create Expense 
+            { loading ? "Submitting New Expense..." : "Create Expense"}  
           </button>
         </div>
       </div>
