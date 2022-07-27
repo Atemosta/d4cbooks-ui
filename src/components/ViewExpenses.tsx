@@ -61,7 +61,7 @@ function createData(
 }
 
 
-const ViewExpenses = ({data, setData}) => {
+const ViewExpenses = ({address, data, setData}) => {
   // Table State
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -70,6 +70,7 @@ const ViewExpenses = ({data, setData}) => {
   // Dialog State
   const [open, setOpen] = React.useState(false);
   const [dialog, setDialog] = React.useState('');
+  const [rowId, setRowId] = React.useState(null);
 
   function convertDataToRows(data) {
     const rows = [];
@@ -87,10 +88,9 @@ const ViewExpenses = ({data, setData}) => {
     return rows;
   }
 
-  const handleClick = (row) => {
-    console.log("Ohaiyooo");
-    console.log(row)
-    setDialog(row);
+  const handleClick = (index) => {
+    setRowId(index);
+    setDialog(data[index]);
     setOpen(true);
   };
 
@@ -130,7 +130,7 @@ const ViewExpenses = ({data, setData}) => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={index} onClick={() => handleClick(row)}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index} onClick={() => handleClick(index)}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
@@ -159,7 +159,7 @@ const ViewExpenses = ({data, setData}) => {
       </Paper>
       </center>
       {/* Dialog Component */}
-      { open && <ViewExpenseDetails data={dialog} setData={setData} open={open} setOpen={setOpen} /> }
+      { open && <ViewExpenseDetails address={address} expenseOld={dialog} index={rowId} data={data} setData={setData} open={open} setOpen={setOpen} /> }
     </div>
   );
 }

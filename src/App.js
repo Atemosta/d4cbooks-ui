@@ -64,7 +64,7 @@ function App() {
     if (loading) {return (<center><LoadingIndicator/></center>);} 
     else if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses}/>);} 
     else if (location === "View") {
-      if (expenses.length > 0) {return(<ViewExpenses data={expenses} setData={setExpenses}/>);}
+      if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
       else {return(
         <InfoBox 
           maintext="You have not created any expenses!"

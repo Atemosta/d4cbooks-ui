@@ -3,10 +3,11 @@ import getApiEndPoint from './getApiEndPoint';
 
 async function updateExpense(newExpenseData){
   const apiURL = getApiEndPoint() + '/expense';
+  console.log(newExpenseData);
   try {
     var apiResponse; 
     await axios({
-      method: 'post',
+      method: 'patch',
       url: apiURL,
       headers: {
       "Content-Type" : "application/json",

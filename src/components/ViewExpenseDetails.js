@@ -16,7 +16,7 @@ import updateExpense from "../api/updateExpense";
 // Styles Import
 import "../styles/EditExpense.css";
 
-const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
+const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, setOpen}) => {
   // State
   const [newProduct, setNewProduct] = useState({
     // name: "",
@@ -52,15 +52,16 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
     setLoading(true);
     // Initial values
     const expense = newProduct;
-    expense.id = data.id;
+    expense.id = expenseOld.id;
+    expense.address = address;
 
     // Set Updated Expense with Default Values
-    if (data.name && !expense.name){expense.name = data.name}
-    if (data.price && !expense.price){expense.price = data.price}
-    if (data.expense_type && !expense.expense_type){expense.expense_type = data.expense_type}
-    if (data.purchase_source && !expense.purchase_source){expense.purchase_source = data.purchase_source}
-    if (data.warranty_url && !expense.warranty_url){expense.warranty_url = data.warranty_url}
-    if (data.description && !expense.description){expense.description = data.description}
+    if (expenseOld.name && !expense.name){expense.name = expenseOld.name}
+    if (expenseOld.price && !expense.price){expense.price = expenseOld.price}
+    if (expenseOld.expense_type && !expense.expense_type){expense.expense_type = expenseOld.expense_type}
+    if (expenseOld.purchase_source && !expense.purchase_source){expense.purchase_source = expenseOld.purchase_source}
+    if (expenseOld.warranty_url && !expense.warranty_url){expense.warranty_url = expenseOld.warranty_url}
+    if (expenseOld.description && !expense.description){expense.description = expenseOld.description}
     
     // If no default values provided, supply default value
     if (!expense.name){expense.name = ""}
@@ -73,14 +74,16 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
     try {
       console.log("Attempting to update expense...", expense.id);
       const response = await updateExpense(expense);
-      if (response.status === 200) {
-        console.log(response);
+      console.log(response);
+      if (response.status === 201) {
         const updatedExpense = response.data;
-        setData(updatedExpense);
+        const dataNew = data;
+        dataNew[index] = updatedExpense;
+        setData(dataNew);
         alert("Expense updated!");
       }
       else{
-        alert("Unable to update expense: ", data.error);
+        alert("Unable to update expense");
       }
 
     } catch (error) {
@@ -91,7 +94,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
   };
 
   const deleteExpense = async () => {
-    var expenseId = data.id;
+    var expenseId = expenseOld.id;
     try {
       console.log("Attempting to delete expense...", expenseId);
       const response = await fetch("../api/deleteExpenseLocal", {
@@ -101,17 +104,16 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
         },
         body: JSON.stringify({id: expenseId}),
       });
-      const data = await response.json();
       if (response.status === 200) {
         alert("Expense deleted!");
-        console.log(response);
-        const updatedExpense = response.data;
-        const dataNew = data;
-        dataNew.push(updatedExpense);
-        setData(dataNew);
+        // console.log(response);
+        // const updatedExpense = response.data;
+        // const dataNew = data;
+        // dataNew.push(updatedExpense);
+        // setData(dataNew);
       }
       else{
-        alert("Unable to delete expense: ", data.error);
+        alert("Unable to delete expense");
       }
 
     } catch (error) {
@@ -142,7 +144,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
                 className="input"
                 type="text"
                 placeholder="Product Name"
-                defaultValue={data.name}
+                defaultValue={expenseOld.name}
                 onChange={(e) => {
                   setNewProduct({ ...newProduct, name: e.target.value });
                 }}
@@ -151,7 +153,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
                 className="input"
                 type="number"
                 placeholder="Price (USD)"
-                defaultValue={data.price}
+                defaultValue={expenseOld.price}
                 onChange={(e) => {
                   setNewProduct({ ...newProduct, price: e.target.value });
                 }}
@@ -163,7 +165,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
                 className="input"
                 type="text"
                 placeholder="Expense Type"
-                defaultValue={data.expense_type}
+                defaultValue={expenseOld.expense_type}
                 onChange={(e) => {
                   setNewProduct({ ...newProduct, expense_type: e.target.value });
                 }}
@@ -172,7 +174,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
                 className="input"
                 type="text"
                 placeholder="Purchase Source"
-                defaultValue={data.purchase_source}
+                defaultValue={expenseOld.purchase_source}
                 onChange={(e) => {
                   setNewProduct({ ...newProduct, purchase_source: e.target.value });
                 }}
@@ -184,7 +186,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
                 className="input"
                 type="url"
                 placeholder="Warranty URL ex: https://warranty.aftershokz.com/cc/cpSignIn.html"
-                defaultValue={data.warranty_url}
+                defaultValue={expenseOld.warranty_url}
                 onChange={(e) => {
                   setNewProduct({ ...newProduct, warranty_url: e.target.value });
                 }}
@@ -193,7 +195,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
             <textarea
               className="text_area"
               placeholder="Description here..."
-              defaultValue={data.description}
+              defaultValue={expenseOld.description}
               onChange={(e) => {
                 setNewProduct({ ...newProduct, description: e.target.value });
               }}
