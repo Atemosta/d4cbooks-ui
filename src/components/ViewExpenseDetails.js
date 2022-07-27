@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 // API Import
+import deleteExpense from '../api/deleteExpense';
 import updateExpense from "../api/updateExpense";
 
 // Styles Import
@@ -40,7 +41,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
 
   const handleDeleteConfirm = () => {
     try {
-      deleteExpense();
+      submitDeleteExpense();
       setDeleteTxn(false);
       setOpen(false);
     } catch (error) {
@@ -93,24 +94,24 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
     setLoading(false);
   };
 
-  const deleteExpense = async () => {
-    var expenseId = expenseOld.id;
+  const submitDeleteExpense = async () => {
+    // Disable the Trigger Buttons
+    setLoading(true);
+
+    // Initial values
+    const expense = newProduct;
+    const id = expenseOld.id;
+    expense.id = id;
+    expense.address = address;    
     try {
-      console.log("Attempting to delete expense...", expenseId);
-      const response = await fetch("../api/deleteExpenseLocal", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({id: expenseId}),
-      });
+      console.log("Attempting to delete expense...", id);
+      const response = await deleteExpense(expense);
+      console.log(response);
       if (response.status === 200) {
-        alert("Expense deleted!");
-        // console.log(response);
-        // const updatedExpense = response.data;
-        // const dataNew = data;
-        // dataNew.push(updatedExpense);
-        // setData(dataNew);
+        const dataNew = data;
+        dataNew.splice(index, 1); // Removes item located at index and mutates array 
+        setData(dataNew);
+        alert(`Expense witd id ${id} deleted!`);
       }
       else{
         alert("Unable to delete expense");
@@ -119,6 +120,9 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
     } catch (error) {
       console.log(error);
     }
+
+    // Reenable the Trigger Buttons
+    setLoading(false);
   };
 
   return (
