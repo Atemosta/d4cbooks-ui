@@ -150,6 +150,12 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
           </header>
 
           <div className="form_container">
+
+            <img
+              src={expenseOld.photoURL}
+              alt="Snapshot of Receipt"
+            />
+
             <div className="flex_row">
               <input
                 className="input"

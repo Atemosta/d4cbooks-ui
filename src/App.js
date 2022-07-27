@@ -70,7 +70,7 @@ function App() {
           maintext="You have not created any expenses!"
           subtext="Click on the image or button below to create your first expense."
           image={imgWrite}
-          setLocation={setLocation}/>
+          setLocation={() => setLocation("Create")}/>
       )} 
     }
     else if (location === "Configure") {return(<div>Configure Expenses</div>);}

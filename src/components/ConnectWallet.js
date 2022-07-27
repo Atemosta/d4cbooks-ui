@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 // Style Imports
+import imgCamera from "../assets/gif/snap-photos.gif"
 import '../styles/ConnectWallet.css'
 
 // Web3 Imports
@@ -79,7 +80,7 @@ const ConnectWallet = ({setAddress}) => {
           <p className="sub-text">Web3 Expense Reporting and Warranty Tracking</p>
           <div className="connect-wallet-container">
             <img
-              src="https://c.tenor.com/B1E638M9DQAAAAAC/anime-taking-pictures.gif"
+              src={imgCamera}
               alt="Anime Girl Taking Photos with Digital Camera"
             />
             <button

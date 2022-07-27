@@ -159,7 +159,7 @@ const ViewExpenses = ({address, data, setData}) => {
       </Paper>
       </center>
       {/* Dialog Component */}
-      { open && <ViewExpenseDetails address={address} expenseOld={dialog} index={rowId} data={data} setData={setData} open={open} setOpen={setOpen} /> }
+      { open && <ViewExpenseDetails address={address} expenseOld={dialog} index={rowId} data={data} setData={setData} open={open} setOpen={setOpen}/> }
     </div>
   );
 }
