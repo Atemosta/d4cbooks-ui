@@ -151,10 +151,14 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
 
           <div className="form_container">
 
-            <img
+            {/* <img
               src={expenseOld.photoURL}
               alt="Snapshot of Receipt"
-            />
+            /> */}
+            <div className="flex_row">
+              <button onClick={() => window.open(`${expenseOld.photoURL}`, '_blank')} className="input">View Photo</button>
+              <button onClick={(e)=>{ e.preventDefault(); console.log("noms");}} className="input">Retake Photo</button>
+            </div>
 
             <div className="flex_row">
               <input
