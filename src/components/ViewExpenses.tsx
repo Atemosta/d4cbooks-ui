@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import styles from "../styles/ViewExpenses.css";
 
 // Dialog Import
-import ExpenseDetail from './ViewExpenseDetails'
+import ViewExpenseDetails from './ViewExpenseDetails'
 
 interface Column {
   id: 'id' | 'name' | 'price' | 'expense_type' | 'purchase_source' | 'density';
@@ -159,7 +159,7 @@ const ViewExpenses = ({data, setData}) => {
       </Paper>
       </center>
       {/* Dialog Component */}
-      { open && <ExpenseDetail data={dialog} setData={setData} open={open} setOpen={setOpen} /> }
+      { open && <ViewExpenseDetails data={dialog} setData={setData} open={open} setOpen={setOpen} /> }
     </div>
   );
 }

@@ -10,13 +10,19 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// API Import
-import updateExpense from "../api/updateExpense";
+// Card Imports
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-// Styles Import
-import "../styles/EditExpense.css";
+// Import Styles
+import styles from "../styles/EditExpense.css";
 
-const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
+const ViewExpenseDetailsMUI = ({data, setData, open, setOpen}) => {
   // State
   const [newProduct, setNewProduct] = useState({
     // name: "",
@@ -27,6 +33,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
     // description: "",
   });
   const [deleteTxn, setDeleteTxn] = useState(false);
+  // const [file, setFile] = useState({});
   const [loading, setLoading] = useState(false);
 
   // Functions
@@ -48,7 +55,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
     }
   };  
 
-  const submitUpdatedExpense = async () => {
+  const updateExpense = async () => {
     setLoading(true);
     // Initial values
     const expense = newProduct;
@@ -72,12 +79,17 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
 
     try {
       console.log("Attempting to update expense...", expense.id);
-      const response = await updateExpense(expense);
+      const response = await fetch("../api/updateExpenseLocal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(expense),
+      });
+      const data = await response.json();
       if (response.status === 200) {
-        console.log(response);
-        const updatedExpense = response.data;
-        setData(updatedExpense);
         alert("Expense updated!");
+        setData(data);
       }
       else{
         alert("Unable to update expense: ", data.error);
@@ -86,7 +98,6 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
     } catch (error) {
       console.log(error);
     }
-
     setLoading(false);
   };
 
@@ -104,11 +115,7 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
       const data = await response.json();
       if (response.status === 200) {
         alert("Expense deleted!");
-        console.log(response);
-        const updatedExpense = response.data;
-        const dataNew = data;
-        dataNew.push(updatedExpense);
-        setData(dataNew);
+        setData(data);
       }
       else{
         alert("Unable to delete expense: ", data.error);
@@ -123,100 +130,101 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
-        <div className="create_product_container">
-        <div className="create_product_form">
-          <header>
-            <div style={{ backgroundColor: "#6495ED", textAlign: "center", fontSize: "25px", fontWeight: "450",padding: "10px 10px 10px 10px"}}>Update Transaction Details
-              <Tooltip title="Delete Transaction">
-                <IconButton onClick={() => setDeleteTxn(true)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-
-          </header>
-
-          <div className="form_container">
-            <div className="flex_row">
-              <input
-                className="input"
-                type="text"
-                placeholder="Product Name"
-                defaultValue={data.name}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, name: e.target.value });
-                }}
-              />
-              <input
-                className="input"
-                type="number"
-                placeholder="Price (USD)"
-                defaultValue={data.price}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, price: e.target.value });
-                }}
-              />
-            </div>
-            
-            <div className="flex_row">
-              <input
-                className="input"
-                type="text"
-                placeholder="Expense Type"
-                defaultValue={data.expense_type}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, expense_type: e.target.value });
-                }}
-              />
-              <input
-                className="input"
-                type="text"
-                placeholder="Purchase Source"
-                defaultValue={data.purchase_source}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, purchase_source: e.target.value });
-                }}
-              />
-            </div>
-            
-            <div className="flex_row">
-              <input
-                className="input"
-                type="url"
-                placeholder="Warranty URL ex: https://warranty.aftershokz.com/cc/cpSignIn.html"
-                defaultValue={data.warranty_url}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, warranty_url: e.target.value });
-                }}
-              />
-            </div>      
-            <textarea
-              className="text_area"
-              placeholder="Description here..."
-              defaultValue={data.description}
-              onChange={(e) => {
-                setNewProduct({ ...newProduct, description: e.target.value });
-              }}
+          <Card  sx={{ maxWidth: 800 }}>
+            <header>
+              <h1>Update Transaction Details
+                <Tooltip title="Delete Transaction">
+                  <IconButton onClick={() => setDeleteTxn(true)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </h1>
+            </header>
+            <CardMedia
+              component="img"
+              height="280"
+              image="https://d4c-expenses-bucket-a398c7780f-dev.s3.amazonaws.com/0x0fef592988529fd2dcdbe9ef6fbf3bb6a0a21066/cceb67d5-006a-4d77-a492-32a994b51ba8.jpg"
+              alt="green iguana"
             />
-            <button
-              className="button"
-              onClick={() => {
-                submitUpdatedExpense();
-              }}
-              disabled={loading}
-            >
-              Update Expense
-            </button>
-            <button
-              className="button"
-              onClick={handleClose}
-              disabled={loading}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
+            <div>
+              <div>
+                <TextField
+                  className='input'
+                  type="text"
+                  placeholder="Product Name"
+                  defaultValue={data.name}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, name: e.target.value });
+                  }}
+                />
+                <TextField
+                  className='input'
+                  type="number"
+                  placeholder="Price (USD)"
+                  defaultValue={data.price}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, price: e.target.value });
+                  }}
+                />
+              </div>
+              
+              <div>
+                <TextField
+                  className='input'
+                  type="text"
+                  placeholder="Expense Type"
+                  defaultValue={data.expense_type}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, expense_type: e.target.value });
+                  }}
+                />
+                <TextField
+                  className='input'
+                  type="text"
+                  placeholder="Purchase Source"
+                  defaultValue={data.purchase_source}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, purchase_source: e.target.value });
+                  }}
+                />
+              </div>
+              
+              <div>
+                <TextField
+                  className='input'
+                  type="url"
+                  placeholder="Warranty URL ex: https://warranty.aftershokz.com/cc/cpSignIn.html"
+                  defaultValue={data.warranty_url}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, warranty_url: e.target.value });
+                  }}
+                />
+              </div>      
+
+              <br/>
+              <TextareaAutosize
+                placeholder="Description here..."
+                defaultValue={data.description}
+                onChange={(e) => {
+                  setNewProduct({ ...newProduct, description: e.target.value });
+                }}
+              />
+              <Button
+                onClick={() => {
+                  updateExpense();
+                }}
+                disabled={loading}
+              >
+                Update Expense
+              </Button>
+              <Button
+                onClick={handleClose}
+                disabled={loading}
+              >
+                Cancel
+              </Button>
+            </div>
+          </Card>
         </DialogContent>
       </Dialog>     
       {/* Delete Txn Dialog  */}
@@ -245,4 +253,4 @@ const ViewExpenseDetails = ({data, setData, open, setOpen}) => {
   )
 }
 
-export default ViewExpenseDetails
+export default ViewExpenseDetailsMUI
