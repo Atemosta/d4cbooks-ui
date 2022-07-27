@@ -14,6 +14,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import deleteExpense from '../api/deleteExpense';
 import updateExpense from "../api/updateExpense";
 
+// Component Imports
+// import LoadingIndicator from './LoadingIndicator';
+
 // Styles Import
 import "../styles/EditExpense.css";
 
@@ -39,9 +42,9 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
     setDeleteTxn(false);
   };  
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     try {
-      submitDeleteExpense();
+      await submitDeleteExpense();
       setDeleteTxn(false);
       setOpen(false);
     } catch (error) {
@@ -109,7 +112,11 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
       console.log(response);
       if (response.status === 200) {
         const dataNew = data;
+        console.log("dataNew preslice")
+        console.log(dataNew);
         dataNew.splice(index, 1); // Removes item located at index and mutates array 
+        console.log("dataNew postslice")
+        console.log(dataNew);
         setData(dataNew);
         alert(`Expense witd id ${id} deleted!`);
       }
@@ -241,8 +248,8 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel}>Cancel</Button>
-          <Button onClick={handleDeleteConfirm} autoFocus>
+          <Button onClick={handleDeleteCancel} disabled={loading}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} disabled={loading} autoFocus>
             Confirm
           </Button>
         </DialogActions>
