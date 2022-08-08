@@ -2,13 +2,16 @@ import React, { createContext, useEffect, useMemo, useContext, useState } from '
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
+  About,
   ConnectWallet,
   CreateExpense,
   InfoBox,
   LoadingIndicator,
   Navbar,
+  Pricing,
   Support,
   // ToggleColorMode
+  Upgrade,
   ViewExpenses
 } from './components'
 
@@ -77,8 +80,11 @@ function App() {
         />
       )} 
     }
+    else if (location === "Configure") {return(<div>Configure Expenses</div>)}
+    else if (location === "Upgrade") {return(<Upgrade/>)}
+    else if (location === "About") {return(<About/>)}
+    else if (location === "Pricing") {return(<Pricing setLocation={setLocation}/>)}
     else if (location === "Support") {return(<Support/>)}
-    else if (location === "Configure") {return(<div>Configure Expenses</div>);}
   };
 
   return (

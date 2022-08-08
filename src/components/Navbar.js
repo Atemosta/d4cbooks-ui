@@ -205,7 +205,7 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
                       <UpgradeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                       <Badge variant="dot" color="error">
-                        <Typography textAlign="center">Upgrade to Premium</Typography>
+                        <Typography textAlign="center">Upgrade to Pro</Typography>
                       </Badge>
                     </MenuItem>
                   )
