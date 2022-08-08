@@ -118,7 +118,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
         console.log("dataNew postslice")
         console.log(dataNew);
         setData(dataNew);
-        alert(`Expense witd id ${id} deleted!`);
+        alert(`Expense with deleted!`);
       }
       else{
         alert("Unable to delete expense");
@@ -228,7 +228,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
               }}
               disabled={loading}
             >
-              Update Expense
+              { loading ? "Updating Expense..." : "Update Expense"}  
             </button>
             <button
               className="button"
@@ -260,7 +260,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
         <DialogActions>
           <Button onClick={handleDeleteCancel} disabled={loading}>Cancel</Button>
           <Button onClick={handleDeleteConfirm} disabled={loading} autoFocus>
-            Confirm
+          { loading ? "Deleting Expense..." : "Confirm"}  
           </Button>
         </DialogActions>
       </Dialog>
