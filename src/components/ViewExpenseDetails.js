@@ -118,7 +118,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
         console.log("dataNew postslice")
         console.log(dataNew);
         setData(dataNew);
-        alert(`Expense with deleted!`);
+        alert(`Expense deleted!`);
       }
       else{
         alert("Unable to delete expense");

@@ -1,24 +1,24 @@
 import React from 'react'
 
-const InfoBox = ({maintext, subtext, image, setLocation}) => {
+const InfoBox = ({mainText, subText, buttonText, image, setLocation, setLocationComponent, externalURL}) => {
   return (
     <div className="App">
       <div className="container">
         <div className="header-container">
-          <p className="header gradient-text">{maintext}</p>
-          <p className="sub-text">{subtext}</p>
+          <p className="header gradient-text">{mainText}</p>
+          <p className="sub-text">{subText}</p>
           <div className="connect-wallet-container">
             <img
               src={image}
               alt="Anime Girl Giving Information"
-              onClick={() => setLocation("create")}
+              onClick={externalURL ? (() => window.open(`${externalURL}`, '_blank')) : ( () => setLocation(setLocationComponent))}
               style= {{cursor: 'pointer' }}
               />
             <button
               className="cta-button connect-wallet-button"
-              onClick={() => setLocation("create")}
+              onClick={externalURL ? (() => window.open(`${externalURL}`, '_blank')) : ( () => setLocation(setLocationComponent))}
             >
-              Create Expense
+              {buttonText}
             </button>
           </div>  
         </div>

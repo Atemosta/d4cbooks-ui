@@ -7,6 +7,7 @@ import {
   InfoBox,
   LoadingIndicator,
   Navbar,
+  Support,
   // ToggleColorMode
   ViewExpenses
 } from './components'
@@ -62,17 +63,21 @@ function App() {
   // Render Content when Connected
   const renderContent = () => {
     if (loading) {return (<center><LoadingIndicator/></center>);} 
-    else if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses}/>);} 
+    else if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses} setLocation={setLocation}/>);} 
     else if (location === "View") {
       if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
       else {return(
         <InfoBox 
-          maintext="You have not created any expenses!"
-          subtext="Click on the image or button below to create your first expense."
+          mainText="You have not created any expenses!"
+          subText="Click on the image or button below to create your first expense."
+          buttonText="Create Expense"
           image={imgWrite}
-          setLocation={() => setLocation("Create")}/>
+          setLocation={setLocation}
+          setLocationComponent="Create"
+        />
       )} 
     }
+    else if (location === "Support") {return(<Support/>)}
     else if (location === "Configure") {return(<div>Configure Expenses</div>);}
   };
 

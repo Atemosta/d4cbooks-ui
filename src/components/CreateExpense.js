@@ -10,7 +10,7 @@ import updateExpensePhoto from "../api/updateExpensePhoto";
 // Styles Import
 import "../styles/CreateExpense.css";
 
-const CreateExpense = ({address, data, setData}) => {
+const CreateExpense = ({address, data, setData, setLocation}) => {
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -93,17 +93,12 @@ const CreateExpense = ({address, data, setData}) => {
           const response2 = await updateExpensePhoto(address, expenseId, imgSrc);
           console.log(response2);
           if (response2.status === 200) {
-            alert("New expense created!");
             const expenseWithPhotoURL = response2.data;
             const dataNew = data;
             dataNew.push(expenseWithPhotoURL);
             setData(dataNew);
-            setNewProduct({
-              name: "",
-              price: "",
-              expense_type: "",
-              purchase_source: "",
-            })
+            alert("New expense created!");
+            setLocation("View");
           }
           else {
             alert("Expense data added, but photo upload failed. Please try again.");

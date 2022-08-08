@@ -25,7 +25,7 @@ import UpgradeIcon from '@mui/icons-material/Upgrade';
 import imgAvatar from '../assets/avatar.png'
 
 // Config Imports
-import { pages, settings } from "../config";
+import { pages_all, pages, settings } from "../config";
 
 const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -66,7 +66,6 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -91,7 +90,6 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
             >
               <MenuIcon />
             </IconButton>
-            { address &&
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -110,13 +108,19 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
+              {/* Pages You Can Only View When Logged In */}
+              {address && pages.map((page) => (
                 <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
+              {/* Pages You Can View At All Times */}
+              {pages_all.map((page_all) => (
+                <MenuItem key={page_all} onClick={() => handleCloseNavMenu(page_all)}>
+                  <Typography textAlign="center">{page_all}</Typography>
+                </MenuItem>
+              ))}
             </Menu>
-            }
           </Box>
           <AutoStoriesIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
@@ -139,17 +143,26 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
           </Typography>
           {/* Render Left Side of Navbar When Logged In */}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            { address && 
-              pages.map((page) => (
+            {/* Pages You Can Only View When Logged In */}
+            { address && pages.map((page) => (
+              <Button
+                key={page}
+                onClick={() => handleCloseNavMenu(page)}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page}
+              </Button>
+            ))}
+            {/* Pages You Can View At All Times */}
+            {pages_all.map((page_all) => (
                 <Button
-                  key={page}
-                  onClick={() => handleCloseNavMenu(page)}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page}
-                </Button>
-              ))
-            }
+                key={page_all}
+                onClick={() => handleCloseNavMenu(page_all)}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page_all}
+              </Button>
+            ))}
           </Box>
           
           <Box sx={{ flexGrow: 0 }}>
