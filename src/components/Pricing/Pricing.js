@@ -54,7 +54,7 @@ const redirects = {
   "Pro": "Upgrade"
 }
 
-const Pricing = ({setLocation}) => {
+const Pricing = ({address, setLocation}) => {
   return (
     <React.Fragment>
       <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
@@ -140,7 +140,9 @@ const Pricing = ({setLocation}) => {
                       {tier.buttonText}
                     </Button>
                   :
-                    <Button fullWidth variant={tier.buttonVariant} onClick={() => setLocation(redirects[tier.title])}>
+                    <Button fullWidth variant={tier.buttonVariant} 
+                    onClick={address ? (() => () => setLocation(redirects[tier.title])) : (() => setLocation("Landing"))}
+                    >
                       {tier.buttonText}
                     </Button>  
                   }

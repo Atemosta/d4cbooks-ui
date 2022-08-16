@@ -1,5 +1,5 @@
 import React from 'react'
-// import imgNotes from '../assets/gif/take-notes.gif'
+import imgNotes from '../assets/gif/take-notes.gif'
 
 const About = ({address, setLocation}) => {
   return (
@@ -7,8 +7,13 @@ const About = ({address, setLocation}) => {
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">{"What is D4CBooks?"}</p>
-          <p className="sub-text">{"D4Books is a simple and affordable alternative to quickbooks for expense tracking of receipts."}</p>
-          <br/>
+          <p className="sub-text">{"D4Books is a simple and affordable alternative to quickbooks for expense tracking of receipts and item warranties."}</p>
+          <img
+            src={imgNotes}
+            alt="Anime Girl Taking Notes"
+            onClick={address ? (() => setLocation("Create")) : (() => setLocation("Landing"))}
+            style= {{cursor: 'pointer' }}
+          />
           <p className="header gradient-text">{"How do you use D4CBooks?"}</p>
           <p className="sub-text">{"1. Log in with your social or metamask account"}</p>
           <p className="sub-text">{"2. Take a picture"}</p>
@@ -17,7 +22,7 @@ const About = ({address, setLocation}) => {
           <div className="connect-wallet-container">
             <button
               className="cta-button connect-wallet-button"
-              onClick={address ? (() => setLocation("Create")) : (() => setLocation("About"))}
+              onClick={address ? (() => setLocation("Create")) : (() => setLocation("Landing"))}
             >
               {"Try out D4CBooks"}
             </button>

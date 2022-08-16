@@ -78,7 +78,7 @@ const ConnectWallet = ({setAddress, setLocation}) => {
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">📸 D4CBooks 🧾</p>
-          <p className="sub-text">Web3 Expense Reporting and Warranty Tracking</p>
+          <p className="sub-text">Simple Expense Reporting and Warranty Tracking</p>
           <div className="connect-wallet-container">
             <img
               src={imgCamera}

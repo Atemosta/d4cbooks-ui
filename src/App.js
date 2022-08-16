@@ -67,7 +67,7 @@ function App() {
   const renderContent = () => {
     if (loading) {return (<center><LoadingIndicator/></center>);} 
     else if (location === "About") {return(<About address={address} setLocation={setLocation}/>)}
-    else if (location === "Pricing") {return(<Pricing setLocation={setLocation}/>)}
+    else if (location === "Pricing") {return(<Pricing address={address} setLocation={setLocation}/>)}
     else if (location === "Support") {return(<Support/>)}
     else if (address) {
       if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses} setLocation={setLocation}/>);} 
