@@ -25,7 +25,7 @@ const style = {
   color: 'white',
 };
 
-const ConnectWallet = ({setAddress}) => {
+const ConnectWallet = ({setAddress, setLocation}) => {
   // Connect Wallet Modal State
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -66,6 +66,7 @@ const ConnectWallet = ({setAddress}) => {
 			// Boom! This should print out public address once we authorize Metamask.
 			console.log("Connected", accounts[0]);
 			setAddress(accounts[0]);
+      setLocation("Create")
 		} catch (error) {
 			console.log(error)
 		}

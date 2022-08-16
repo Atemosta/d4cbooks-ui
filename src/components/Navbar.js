@@ -47,6 +47,19 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
     setAnchorElUser(null);
   };
 
+  const handleLogoClick = () => {
+    if (address) {
+      setLocation("Create");  
+    } else {
+      setLocation("Landing");  
+    }
+  };
+
+  const handleLogout = () => {
+    setAddress(null);
+    setLocation("Landing");
+  };
+
   const flipTheme = () => {
     return (mode === 'light' ? 'dark' : 'light');
   };
@@ -61,7 +74,7 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AutoStoriesIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <AutoStoriesIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} onClick={() => handleLogoClick()} style= {{cursor: 'pointer'}}/>
           <Typography
             variant="h6"
             noWrap
@@ -75,11 +88,13 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            onClick={() => handleLogoClick()}
+            style= {{cursor: 'pointer'}}
           >
             D4CBooks
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>                      {/* Render Left Side of Navbar When Logged In */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>                      
+          {/* Render Left Side of Navbar When Logged In */}
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -122,7 +137,7 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
               ))}
             </Menu>
           </Box>
-          <AutoStoriesIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <AutoStoriesIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} onClick={() => handleLogoClick()} style= {{cursor: 'pointer'}}/>
           <Typography
             variant="h5"
             noWrap
@@ -138,6 +153,8 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            onClick={() => handleLogoClick()}
+            style= {{cursor: 'pointer'}}
           >
             D4CBooks
           </Typography>
@@ -220,7 +237,7 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
                 }   
                  if (address && setting === "Logout") {
                   return (
-                    <MenuItem key={setting} onClick={() => setAddress(null)}>
+                    <MenuItem key={setting} onClick={() => handleLogout()}>
                       <LogoutIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>

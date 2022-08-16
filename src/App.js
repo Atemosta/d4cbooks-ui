@@ -28,7 +28,7 @@ function App() {
   const [address, setAddress] = useState(null);
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [location, setLocation] = useState('Create');
+  const [location, setLocation] = useState('Landing');
   const [mode, setMode] = useState('dark');
   const colorMode = useContext(ColorModeContext);
   const theme = useMemo(
@@ -66,25 +66,28 @@ function App() {
   // Render Content when Connected
   const renderContent = () => {
     if (loading) {return (<center><LoadingIndicator/></center>);} 
-    else if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses} setLocation={setLocation}/>);} 
-    else if (location === "View") {
-      if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
-      else {return(
-        <InfoBox 
-          mainText="You have not created any expenses!"
-          subText="Click on the image or button below to create your first expense."
-          buttonText="Create Expense"
-          image={imgWrite}
-          setLocation={setLocation}
-          setLocationComponent="Create"
-        />
-      )} 
-    }
-    else if (location === "Configure") {return(<div>Configure Expenses</div>)}
-    else if (location === "Upgrade") {return(<Upgrade/>)}
     else if (location === "About") {return(<About/>)}
     else if (location === "Pricing") {return(<Pricing setLocation={setLocation}/>)}
     else if (location === "Support") {return(<Support/>)}
+    else if (address) {
+      if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses} setLocation={setLocation}/>);} 
+      else if (location === "View") {
+        if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
+        else {return(
+          <InfoBox 
+            mainText="You have not created any expenses!"
+            subText="Click on the image or button below to create your first expense."
+            buttonText="Create Expense"
+            image={imgWrite}
+            setLocation={setLocation}
+            setLocationComponent="Create"
+          />
+        )} 
+      }
+      else if (location === "Configure") {return(<div>Configure Expenses</div>)}
+      else if (location === "Upgrade") {return(<Upgrade/>)}
+    }
+    else if (location === "Landing") {return (<ConnectWallet setAddress={setAddress} setLocation={setLocation} />)}
   };
 
   return (
@@ -93,10 +96,7 @@ function App() {
       <CssBaseline />
         <main mode={mode} setMode={setMode}>
           <Navbar address={address} setAddress={setAddress} setLocation={setLocation} mode={mode} setMode={setMode}/>
-          { address 
-          ? renderContent()
-          : <ConnectWallet setAddress={setAddress}/>
-          }
+            {renderContent()}
         </main>
       </ThemeProvider>
     </ColorModeContext.Provider>
