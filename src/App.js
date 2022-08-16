@@ -66,7 +66,7 @@ function App() {
   // Render Content when Connected
   const renderContent = () => {
     if (loading) {return (<center><LoadingIndicator/></center>);} 
-    else if (location === "About") {return(<About/>)}
+    else if (location === "About") {return(<About address={address} setLocation={setLocation}/>)}
     else if (location === "Pricing") {return(<Pricing setLocation={setLocation}/>)}
     else if (location === "Support") {return(<Support/>)}
     else if (address) {
