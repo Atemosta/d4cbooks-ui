@@ -183,13 +183,13 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
           </Box>
           
           <Box sx={{ flexGrow: 0 }}>
-            <Badge variant="dot" color="error">
+            {/* <Badge variant="dot" color="error"> */}
               <Tooltip title="Profile Settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Account Avatar" src={imgAvatar} />
                 </IconButton>
               </Tooltip>              
-            </Badge>
+            {/* </Badge> */}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

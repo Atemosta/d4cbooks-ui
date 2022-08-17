@@ -29,7 +29,7 @@ const tiers = [
     subheader: 'Most popular',
     price: '6',
     description: [
-      '1000 transactions per month',
+      'Unlimited transactions per month',
       'Detailed end-of-year reports',
       'Priority customer support',
     ],

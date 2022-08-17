@@ -126,6 +126,7 @@ const CreateExpense = ({address, data, setData, setLocation}) => {
           
           <WebcamCapture/>
 
+        { (imgSrc) && <div>
           <div className="flex_row">
             <input
               className="input"
@@ -171,6 +172,7 @@ const CreateExpense = ({address, data, setData, setLocation}) => {
           >
             { loading ? "Submitting New Expense..." : "Create Expense"}  
           </button>
+          </div>}
         </div>
       </div>
     </div>

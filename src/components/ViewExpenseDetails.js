@@ -13,9 +13,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // API Import
 import deleteExpense from '../api/deleteExpense';
 import updateExpense from "../api/updateExpense";
+import updateExpensePhoto from "../api/updateExpensePhoto";
 
 // Component Imports
 // import LoadingIndicator from './LoadingIndicator';
+
+// External Imports
+import Webcam from "react-webcam";
 
 // Styles Import
 import "../styles/EditExpense.css";
@@ -23,15 +27,23 @@ import "../styles/EditExpense.css";
 const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, setOpen}) => {
   // State
   const [newProduct, setNewProduct] = useState({
-    // name: "",
-    // price: "",
-    // expense_type: "",
-    // purchase_source: "",
-    // warranty_url: "",
-    // description: "",
+    id: expenseOld.id,
+    address: address,
+    name: expenseOld.name,
+    price: expenseOld.price,
+    expense_type: expenseOld.expense_type,
+    purchase_source: expenseOld.purchase_source,
+    warranty_url: expenseOld.warranty_url,
+    description: expenseOld.description,
+    photoURL: expenseOld.photoURL,
   });
   const [deleteTxn, setDeleteTxn] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [imgSrc, setImgSrc] = React.useState(null);
+  const [retakeMode, setRetakeMode] = React.useState(false);
+  const [retakeDialog, setRetakeDialog] = useState(false);
+
+
 
   // Functions
   const handleClose = () => {
@@ -52,48 +64,138 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
     }
   };  
 
+  // Setup Webcam Component
+  const WebcamCapture = () => {
+    const FACING_MODE_USER = "user";
+    const FACING_MODE_ENVIRONMENT = "environment"
+    const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
+    const webcamRef = React.useRef(null);
+
+    const flip = React.useCallback(() => {
+      setFacingMode(
+        prevState =>
+          prevState === FACING_MODE_USER
+            ? FACING_MODE_ENVIRONMENT
+            : FACING_MODE_USER
+      );
+    }, []);
+
+    const capture = React.useCallback(() => {
+      const imageSrc = webcamRef.current.getScreenshot();
+      setImgSrc(imageSrc);
+    }, [webcamRef]);
+
+    const reset = () => {
+      setImgSrc(null);
+    };
+
+    const videoConstraints = {
+      facingMode: facingMode,
+    };
+  
+    return (
+      <div>
+        <center>
+        { imgSrc === null 
+        ? 
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={videoConstraints}
+        />
+        : <img src={imgSrc} alt={"Snapshot Taken"}/>
+        }
+          { imgSrc === null 
+          ? 
+          <div>
+            <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
+            <br/>
+            <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input">Capture Photo</button>
+            <br/>
+            <button onClick={(e)=>{ e.preventDefault(); setRetakeMode(false);}} className="input">Cancel</button>
+          </div> 
+          : 
+          <div>
+            <button onClick={(e)=>{ e.preventDefault(); setRetakeDialog(true);}} className="input">Submit New Photo</button>
+            <br/>
+            <button onClick={(e)=> { e.preventDefault(); reset();}} className="input"> Retake Photo </button>
+            <br/>
+            <button onClick={(e)=>{ e.preventDefault(); setRetakeMode(false);}} className="input">Cancel</button>
+          </div>
+          }
+        </center>
+      </div>
+    );
+  };
+
+  const handleRetakeCancel = () => {
+    setRetakeDialog(false);
+    setRetakeMode(false);
+  };  
+
+  const handleRetakeConfirm = async () => {
+    try {
+      const updatedPhotoURL = await submitRetakePhoto();
+      setRetakeDialog(false);
+      setRetakeMode(false);
+      if (updatedPhotoURL){alert("Succesfully updated photo!");}
+    } catch (error) {
+      alert("Unable to Retake Photo. Please try again or contact support.");
+      console.log(error);
+    }
+  };  
+
+  const submitRetakePhoto = async () => {
+    setLoading(true);
+    try {
+      if (imgSrc) {
+        // UPDATE PHOTO AND USE NEW PHOTO URL
+        const response = await updateExpensePhoto(address, expenseOld.id, imgSrc);
+            console.log(response);
+            if (response.status === 200) {
+              const updatedExpense = response.data;
+              const newPhotoURL = updatedExpense.photoURL
+              console.log(newPhotoURL);
+              setNewProduct({ ...newProduct, photoURL: newPhotoURL})
+              console.log("photoURL has been updated!: " + newPhotoURL);
+              return newPhotoURL;
+            }
+            else {
+              alert("Photo upload failed. Please try again or contact support");
+            }
+      }
+      else {
+        alert("No photo taken! Please take a photo and submit again.")
+      }
+    } catch (error) {
+      alert("Unable to update photo, please try again or contact support.")
+      console.log("Error")
+    }
+    setLoading(false);
+  };
+
   const submitUpdatedExpense = async () => {
     setLoading(true);
-    // Initial values
-    const expense = newProduct;
-    expense.id = expenseOld.id;
-    expense.address = address;
-
-    // Set Updated Expense with Default Values
-    if (expenseOld.name && !expense.name){expense.name = expenseOld.name}
-    if (expenseOld.price && !expense.price){expense.price = expenseOld.price}
-    if (expenseOld.expense_type && !expense.expense_type){expense.expense_type = expenseOld.expense_type}
-    if (expenseOld.purchase_source && !expense.purchase_source){expense.purchase_source = expenseOld.purchase_source}
-    if (expenseOld.warranty_url && !expense.warranty_url){expense.warranty_url = expenseOld.warranty_url}
-    if (expenseOld.description && !expense.description){expense.description = expenseOld.description}
-    
-    // If no default values provided, supply default value
-    if (!expense.name){expense.name = ""}
-    if (!expense.price){expense.price = ""}
-    if (!expense.expense_type){expense.expense_type = ""}
-    if (!expense.purchase_source){expense.purchase_source = ""}
-    if (!expense.warranty_url){expense.warranty_url = ""}
-    if (!expense.description){expense.description = ""}
-
     try {
+      const expense = newProduct;
       console.log("Attempting to update expense...", expense.id);
       const response = await updateExpense(expense);
       console.log(response);
       if (response.status === 201) {
+        console.log(response.data)
         const updatedExpense = response.data;
         const dataNew = data;
         dataNew[index] = updatedExpense;
         setData(dataNew);
         alert("Expense updated!");
       }
-      else{
+      else {
         alert("Unable to update expense");
       }
-
     } catch (error) {
       console.log(error);
-    }
-
+  }
     setLoading(false);
   };
 
@@ -120,10 +222,9 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
         setData(dataNew);
         alert(`Expense deleted!`);
       }
-      else{
+      else {
         alert("Unable to delete expense");
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -148,96 +249,98 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
             </div>
 
           </header>
-
           <div className="form_container">
+          { (retakeMode) 
+          ? <WebcamCapture/>
+          :
+            /* Start Form */
+            <div>
+              <div className="flex_row">
+                <button style= {{cursor: 'pointer'}} onClick={() => window.open(`${expenseOld.photoURL}`, '_blank')} className="input">View Photo</button>
+                <button style= {{cursor: 'pointer'}} onClick={(e)=>{ e.preventDefault(); setRetakeMode(true);}} className="input">Retake Photo</button>
+              </div>
 
-            {/* <img
-              src={expenseOld.photoURL}
-              alt="Snapshot of Receipt"
-            /> */}
-            <div className="flex_row">
-              <button onClick={() => window.open(`${expenseOld.photoURL}`, '_blank')} className="input">View Photo</button>
-              <button onClick={(e)=>{ e.preventDefault(); console.log("noms");}} className="input">Retake Photo</button>
+              <div className="flex_row">
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="Product Name"
+                  defaultValue={newProduct.name}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, name: e.target.value });
+                  }}
+                />
+                <input
+                  className="input"
+                  type="number"
+                  placeholder="Price (USD)"
+                  defaultValue={newProduct.price}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, price: e.target.value });
+                  }}
+                />
+              </div>
+              
+              <div className="flex_row">
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="Expense Type"
+                  defaultValue={newProduct.expense_type}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, expense_type: e.target.value });
+                  }}
+                />
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="Purchase Source"
+                  defaultValue={newProduct.purchase_source}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, purchase_source: e.target.value });
+                  }}
+                />
+              </div>
+              
+              <div className="flex_row">
+                <input
+                  className="input"
+                  type="url"
+                  placeholder="Warranty URL ex: https://warranty.aftershokz.com/cc/cpSignIn.html"
+                  defaultValue={newProduct.warranty_url}
+                  onChange={(e) => {
+                    setNewProduct({ ...newProduct, warranty_url: e.target.value });
+                  }}
+                />
+              </div>      
+              <textarea
+                className="text_area"
+                placeholder="Description here..."
+                defaultValue={newProduct.description}
+                onChange={(e) => {
+                  setNewProduct({ ...newProduct, description: e.target.value });
+                }}
+              />
+              <button
+                className="button"
+                onClick={() => {
+                  submitUpdatedExpense();
+                }}
+                disabled={loading}
+              >
+                { loading ? "Updating Expense..." : "Update Expense"}  
+              </button>
+              <button
+                className="button"
+                onClick={handleClose}
+                disabled={loading}
+              >
+                Cancel
+              </button>
             </div>
-
-            <div className="flex_row">
-              <input
-                className="input"
-                type="text"
-                placeholder="Product Name"
-                defaultValue={expenseOld.name}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, name: e.target.value });
-                }}
-              />
-              <input
-                className="input"
-                type="number"
-                placeholder="Price (USD)"
-                defaultValue={expenseOld.price}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, price: e.target.value });
-                }}
-              />
-            </div>
-            
-            <div className="flex_row">
-              <input
-                className="input"
-                type="text"
-                placeholder="Expense Type"
-                defaultValue={expenseOld.expense_type}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, expense_type: e.target.value });
-                }}
-              />
-              <input
-                className="input"
-                type="text"
-                placeholder="Purchase Source"
-                defaultValue={expenseOld.purchase_source}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, purchase_source: e.target.value });
-                }}
-              />
-            </div>
-            
-            <div className="flex_row">
-              <input
-                className="input"
-                type="url"
-                placeholder="Warranty URL ex: https://warranty.aftershokz.com/cc/cpSignIn.html"
-                defaultValue={expenseOld.warranty_url}
-                onChange={(e) => {
-                  setNewProduct({ ...newProduct, warranty_url: e.target.value });
-                }}
-              />
-            </div>      
-            <textarea
-              className="text_area"
-              placeholder="Description here..."
-              defaultValue={expenseOld.description}
-              onChange={(e) => {
-                setNewProduct({ ...newProduct, description: e.target.value });
-              }}
-            />
-            <button
-              className="button"
-              onClick={() => {
-                submitUpdatedExpense();
-              }}
-              disabled={loading}
-            >
-              { loading ? "Updating Expense..." : "Update Expense"}  
-            </button>
-            <button
-              className="button"
-              onClick={handleClose}
-              disabled={loading}
-            >
-              Cancel
-            </button>
-          </div>
+            // End Form
+          }
+          </div> 
         </div>
       </div>
         </DialogContent>
@@ -261,6 +364,28 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
           <Button onClick={handleDeleteCancel} disabled={loading}>Cancel</Button>
           <Button onClick={handleDeleteConfirm} disabled={loading} autoFocus>
           { loading ? "Deleting Expense..." : "Confirm"}  
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Retake Photo Dialog  */}
+      <Dialog
+        open={retakeDialog}
+        onClose={handleRetakeCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Retake Photo"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to submit this photo? The original photo will be lost.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleRetakeCancel} disabled={loading}>Cancel</Button>
+          <Button onClick={handleRetakeConfirm} disabled={loading} autoFocus>
+          { loading ? "Updating Photo..." : "Confirm"}  
           </Button>
         </DialogActions>
       </Dialog>
