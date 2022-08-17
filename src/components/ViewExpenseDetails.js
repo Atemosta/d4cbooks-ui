@@ -137,6 +137,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
       const updatedPhotoURL = await submitRetakePhoto();
       setRetakeDialog(false);
       setRetakeMode(false);
+      setImgSrc(null);
       if (updatedPhotoURL){alert("Succesfully updated photo!");}
     } catch (error) {
       alert("Unable to Retake Photo. Please try again or contact support.");
