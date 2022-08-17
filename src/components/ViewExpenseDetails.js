@@ -43,8 +43,6 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
   const [retakeMode, setRetakeMode] = React.useState(false);
   const [retakeDialog, setRetakeDialog] = useState(false);
 
-
-
   // Functions
   const handleClose = () => {
     setOpen(false);
@@ -109,9 +107,9 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
           { imgSrc === null 
           ? 
           <div>
-            <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
-            <br/>
             <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input">Capture Photo</button>
+            <br/>
+            <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
             <br/>
             <button onClick={(e)=>{ e.preventDefault(); setRetakeMode(false);}} className="input">Cancel</button>
           </div> 
@@ -256,7 +254,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
             /* Start Form */
             <div>
               <div className="flex_row">
-                <button style= {{cursor: 'pointer'}} onClick={() => window.open(`${expenseOld.photoURL}`, '_blank')} className="input">View Photo</button>
+                <button style= {{cursor: 'pointer'}} onClick={() => window.open(`${newProduct.photoURL}`, '_blank')} className="input">View Photo</button>
                 <button style= {{cursor: 'pointer'}} onClick={(e)=>{ e.preventDefault(); setRetakeMode(true);}} className="input">Retake Photo</button>
               </div>
 

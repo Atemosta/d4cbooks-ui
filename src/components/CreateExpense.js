@@ -63,12 +63,14 @@ const CreateExpense = ({address, data, setData, setLocation}) => {
         : <img src={imgSrc} alt={"Snapshot Taken"}/>
         }
           { imgSrc === null 
-          ? <div>
-          <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
-          <br/>
-          <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input">Capture Photo</button>
+          ? 
+          <div>
+            <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input">Capture Photo</button>
+            <br/>
+            <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
           </div> 
-          : <button onClick={(e)=> { e.preventDefault(); reset();}} className="input"> Retake Photo </button>
+          : 
+            <button onClick={(e)=> { e.preventDefault(); reset();}} className="input"> Retake Photo </button>
           }
         </center>
       </div>
