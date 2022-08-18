@@ -1,10 +1,14 @@
-// const SLS_URL_DEV   = 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev'
-// const SLS_URL_QA    = 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev'
-// const SLS_URL_PROD  = 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev';
+// ----- Navbar Pages ----- //
 const pages_all = ['About', 'Support'];
 const pages = ['Create', 'View'];
 const settings = ['Login', 'Account', 'Theme', 'Logout']
-const SLS_URL = 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev'
 
+// SLS API Endpoints
+const SLS_URL = {
+  'local': 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev',
+  'dev': 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev',
+  'qa': 'TBD',
+  'prod': 'TBD',
+}
 
 export { pages_all, pages, settings, SLS_URL }
