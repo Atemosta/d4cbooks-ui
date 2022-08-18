@@ -3,7 +3,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
   About,
-  ConnectWallet,
+  // ConnectWallet,
   CreateExpense,
   InfoBox,
   LoadingIndicator,
@@ -21,14 +21,19 @@ import { WEB3AUTH_CLIENT_ID } from "./config";
 
 // ----- Web3Auth Imports ----- //
 import { Web3Auth } from "@web3auth/web3auth";
+import RPC from "./web3RPC"; // for using web3.js
 
 // Import Images
+import imgCamera from "./assets/gif/snap-photos.gif"
+import imgLinkStart from "./assets/gif/link-start.gif"
 import imgWrite from './assets/gif/write.gif'
+import './styles/ConnectWallet.css'
 
 // Theme Settings
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
+  const [connected, setConnected] = useState(false);
   const [web3auth, setWeb3auth] = useState(null);
   const [provider, setProvider] = useState(null);
   const [address, setAddress] = useState(null);
@@ -95,7 +100,6 @@ function App() {
     };
 
     init();
-  // eslint-disable-next-line 
   }, []);
 
   // Render Content when Connected
@@ -135,6 +139,58 @@ function App() {
     )}
   };
 
+  const login = async () => {
+    if (!web3auth) {
+      console.log("web3auth not initialized yet");
+      return;
+    }
+    const web3authProvider = await web3auth.connect();
+    setProvider(web3authProvider);
+    setConnected(true);
+  };
+
+  const getAccounts = async () => {
+    if (!provider) {
+      console.log("provider not initialized yet");
+      return;
+    }
+    const rpc = new RPC(provider);
+    const address = await rpc.getAccounts();
+    console.log("Connected", address);
+    setAddress(address);
+    setLocation("Create")
+  };
+
+  const connectWalletFlow = async () => {
+    await login();
+    await getAccounts();
+  };
+
+  const ConnectWallet = () => {
+    return (
+      <div className="App">
+        <div className="container">
+          <div className="header-container">
+            <p className="header gradient-text">📸 D4CBooks 🧾</p>
+            <p className="sub-text">Simple Expense Reporting and Warranty Tracking</p>
+            <div className="connect-wallet-container">
+              { connected 
+              ? <img src={imgLinkStart} alt="Link Start!" />
+              : <img src={imgCamera} alt="Anime Girl Taking Photos with Digital Camera" />
+              }
+              <button
+                className="cta-button connect-wallet-button"
+                onClick={connectWalletFlow}
+              >
+                { connected ? "Start App!" : "Create Account / Login"}
+              </button>
+            </div>  
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -148,6 +204,7 @@ function App() {
             setMode={setMode}
             web3auth={web3auth}
             setProvider={setProvider}
+            setConnected={setConnected}
           />
             {renderContent()}
         </main>

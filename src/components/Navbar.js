@@ -27,7 +27,7 @@ import imgAvatar from '../assets/avatar.png'
 // Config Imports
 import { pages_all, pages, settings } from "../config";
 
-const Navbar = ({address, setAddress, setLocation, mode, setMode, web3auth, setProvider}) => {
+const Navbar = ({address, setAddress, setLocation, mode, setMode, web3auth, setProvider, setConnected}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -62,6 +62,7 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode, web3auth, setP
     }
     await web3auth.logout();
     setAddress(null);
+    setConnected(false);
     setProvider(null);
     setLocation("Landing");
   };

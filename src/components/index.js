@@ -1,5 +1,4 @@
 export { default as About } from './About';
-export { default as ConnectWallet } from './ConnectWallet/ConnectWallet';
 export { default as CreateExpense } from './CreateExpense';
 export { default as InfoBox } from './InfoBox';
 export { default as LoadingIndicator } from './LoadingIndicator';
