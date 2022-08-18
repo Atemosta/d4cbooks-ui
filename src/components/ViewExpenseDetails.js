@@ -133,6 +133,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
   };  
 
   const handleRetakeConfirm = async () => {
+    setLoading(true);
     try {
       const updatedPhotoURL = await submitRetakePhoto();
       setRetakeDialog(false);
@@ -143,10 +144,10 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
       alert("Unable to Retake Photo. Please try again or contact support.");
       console.log(error);
     }
+    setLoading(false);
   };  
 
   const submitRetakePhoto = async () => {
-    setLoading(true);
     try {
       if (imgSrc) {
         // UPDATE PHOTO AND USE NEW PHOTO URL
@@ -158,6 +159,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
               console.log(newPhotoURL);
               setNewProduct({ ...newProduct, photoURL: newPhotoURL})
               console.log("photoURL has been updated!: " + newPhotoURL);
+              setLoading(false);
               return newPhotoURL;
             }
             else {
@@ -171,7 +173,6 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
       alert("Unable to update photo, please try again or contact support.")
       console.log("Error")
     }
-    setLoading(false);
   };
 
   const submitUpdatedExpense = async () => {

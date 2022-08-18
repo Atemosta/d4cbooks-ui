@@ -7,66 +7,28 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import styles from "../styles/ViewExpenses.css";
 
 // Dialog Import
 import ViewExpenseDetails from './ViewExpenseDetails'
 
-interface Column {
-  id: 'id' | 'name' | 'price' | 'expense_type' | 'purchase_source' | 'density';
-  label: string;
-  minWidth?: number;
-  align?: 'right';
-  format?: (value: number) => string;
-}
-
-const columns: readonly Column[] = [
-  { id: 'id', label: 'Id', minWidth: 170 },
+const columns = [
+  { id: 'id', label: 'Expense Id', minWidth: 170 },
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'price', label: 'Price', minWidth: 170 },
-  {
-    id: 'expense_type',
-    label: 'Expense Type',
-    minWidth: 170,
-  },
-  {
-    id: 'purchase_source',
-    label: 'Purchase Source',
-    minWidth: 170,
-  },
+  { id: 'expense_type', label: 'Expense Type', minWidth: 170 },
+  { id: 'purchase_source', label: 'Purchase Source', minWidth: 170 },
 ];
 
-interface Data {
-  id: string;
-  name: string;
-  price: string;
-  expense_type: string;
-  purchase_source: string;
+function createData(id, name, price, expense_type, purchase_source) {
+  return { id, name, price, expense_type, purchase_source };
 }
-
-function createData(
-  id: string,
-  name: string,
-  price: string,
-  expense_type: string,
-  purchase_source: string,
-): Data {
-  return {
-    id,
-    name,
-    price,
-    expense_type,
-    purchase_source,
-  };
-}
-
 
 const ViewExpenses = ({address, data, setData}) => {
   // Table State
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const rows = convertDataToRows(data);
-
+  
   // Dialog State
   const [open, setOpen] = React.useState(false);
   const [dialog, setDialog] = React.useState('');
@@ -88,37 +50,38 @@ const ViewExpenses = ({address, data, setData}) => {
     return rows;
   }
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   const handleClick = (index) => {
     setRowId(index);
     setDialog(data[index]);
     setOpen(true);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   return (
     <div>
-      <header className={styles.header_list}>
-        <h1 style={{ textAlign: 'center' }}>🧾 List of Expenses</h1>
-      </header>
-      <center>
-      <Paper sx={{ width: '95%', overflow: 'hidden'}}>
-        <TableContainer sx={{ maxHeight: 800}}>
+      <Paper sx={{ width: '100%' }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-            <TableRow>
+              <TableRow>
+                <TableCell align="center" colSpan={5}>
+                <h1 style={{ textAlign: 'center' }}>🧾 List of Expenses</h1>
+                </TableCell>
+              </TableRow>
+              <TableRow>
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ minWidth: column.minWidth }}
+                    style={{ top: 57, minWidth: column.minWidth }}
                   >
                     {column.label}
                   </TableCell>
@@ -130,7 +93,7 @@ const ViewExpenses = ({address, data, setData}) => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={index} onClick={() => handleClick(index)}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={`Row: ${index}`} onClick={() => handleClick(index)}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
@@ -157,7 +120,6 @@ const ViewExpenses = ({address, data, setData}) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      </center>
       {/* Dialog Component */}
       { open && <ViewExpenseDetails address={address} expenseOld={dialog} index={rowId} data={data} setData={setData} open={open} setOpen={setOpen}/> }
     </div>
