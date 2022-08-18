@@ -1,4 +1,3 @@
-import React from 'react'
 import imgNotes from '../assets/gif/take-notes.gif'
 
 const About = ({address, setLocation}) => {
