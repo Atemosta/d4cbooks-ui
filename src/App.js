@@ -10,13 +10,17 @@ import {
   Navbar,
   Pricing,
   Support,
-  // ToggleColorMode
   Upgrade,
-  ViewExpenses
+  // ViewExpenses
 } from './components'
 
-// Import API Calls
+// ----- API Imports ----- //
+import getEnv from "./api/getEnv";
 import getExpenses from './api/getExpenses';
+import { WEB3AUTH_CLIENT_ID } from "./config";
+
+// ----- Web3Auth Imports ----- //
+import { Web3Auth } from "@web3auth/web3auth";
 
 // Import Images
 import imgWrite from './assets/gif/write.gif'
@@ -25,6 +29,8 @@ import imgWrite from './assets/gif/write.gif'
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 function App() {
+  const [web3auth, setWeb3auth] = useState(null);
+  const [provider, setProvider] = useState(null);
   const [address, setAddress] = useState(null);
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -63,6 +69,35 @@ function App() {
   // eslint-disable-next-line
   }, [address]);
 
+  useEffect(() => {
+    const init = async () => {
+      try {
+      const env  = getEnv();
+      const clientId = WEB3AUTH_CLIENT_ID[env]; // TODO: UPDATE
+      const web3auth = new Web3Auth({
+        clientId: clientId, // get it from Web3Auth Dashboard
+        chainConfig: {
+          chainNamespace: "eip155",
+          chainId: "0x89", // hex of 137, polygon mainnet
+        },
+      });
+
+      setWeb3auth(web3auth);
+
+      await web3auth.initModal();
+      if (web3auth.provider) {
+        setProvider(web3auth.provider);
+      }
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    init();
+  // eslint-disable-next-line 
+  }, []);
+
   // Render Content when Connected
   const renderContent = () => {
     if (loading) {return (<center><LoadingIndicator/></center>);} 
@@ -72,7 +107,8 @@ function App() {
     else if (address) {
       if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses} setLocation={setLocation}/>);} 
       else if (location === "View") {
-        if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
+        if (expenses.length > 0) {return(<Support/>);}
+        // if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
         else {return(
           <InfoBox 
             mainText="You have not created any expenses!"
@@ -87,7 +123,16 @@ function App() {
       else if (location === "Configure") {return(<div>Configure Expenses</div>)}
       else if (location === "Upgrade") {return(<Upgrade/>)}
     }
-    else if (location === "Landing") {return (<ConnectWallet setAddress={setAddress} setLocation={setLocation} />)}
+    else if (location === "Landing") {return (
+      <ConnectWallet 
+        setAddress={setAddress} 
+        setLocation={setLocation} 
+        web3auth={web3auth} 
+        setWeb3auth={setWeb3auth}
+        provider={provider}
+        setProvider={setProvider}
+      />
+    )}
   };
 
   return (
@@ -95,7 +140,15 @@ function App() {
       <ThemeProvider theme={theme}>
       <CssBaseline />
         <main mode={mode} setMode={setMode}>
-          <Navbar address={address} setAddress={setAddress} setLocation={setLocation} mode={mode} setMode={setMode}/>
+          <Navbar 
+            address={address} 
+            setAddress={setAddress} 
+            setLocation={setLocation} 
+            mode={mode} 
+            setMode={setMode}
+            web3auth={web3auth}
+            setProvider={setProvider}
+          />
             {renderContent()}
         </main>
       </ThemeProvider>

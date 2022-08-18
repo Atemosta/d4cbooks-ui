@@ -27,7 +27,7 @@ import imgAvatar from '../assets/avatar.png'
 // Config Imports
 import { pages_all, pages, settings } from "../config";
 
-const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
+const Navbar = ({address, setAddress, setLocation, mode, setMode, web3auth, setProvider}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -55,8 +55,14 @@ const Navbar = ({address, setAddress, setLocation, mode, setMode}) => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (!web3auth) {
+      console.log("web3auth not initialized yet");
+      return;
+    }
+    await web3auth.logout();
     setAddress(null);
+    setProvider(null);
     setLocation("Landing");
   };
 
