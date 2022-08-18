@@ -7,6 +7,6 @@ export { default as Pricing } from './Pricing/Pricing';
 export { default as Support } from './Support';
 export { default as ToggleColorMode } from './ToggleColorMode';
 export { default as Upgrade } from './Upgrade';
-// export { default as ViewExpenses } from './ViewExpenses.tsx';
+export { default as ViewExpenses } from './ViewExpenses';
 export { default as ViewExpenseDetails } from './ViewExpenseDetails';
 

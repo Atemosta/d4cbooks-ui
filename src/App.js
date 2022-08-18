@@ -3,7 +3,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
   About,
-  // ConnectWallet,
   CreateExpense,
   InfoBox,
   LoadingIndicator,
@@ -11,7 +10,7 @@ import {
   Pricing,
   Support,
   Upgrade,
-  // ViewExpenses
+  ViewExpenses
 } from './components'
 
 // ----- API Imports ----- //
@@ -111,8 +110,7 @@ function App() {
     else if (address) {
       if (location === "Create") {return (<CreateExpense address={address} data={expenses} setData={setExpenses} setLocation={setLocation}/>);} 
       else if (location === "View") {
-        if (expenses.length > 0) {return(<Support/>);}
-        // if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
+        if (expenses.length > 0) {return(<ViewExpenses address={address} data={expenses} setData={setExpenses}/>);}
         else {return(
           <InfoBox 
             mainText="You have not created any expenses!"
@@ -161,11 +159,6 @@ function App() {
     setLocation("Create")
   };
 
-  const connectWalletFlow = async () => {
-    await login();
-    await getAccounts();
-  };
-
   const ConnectWallet = () => {
     return (
       <div className="App">
@@ -180,7 +173,7 @@ function App() {
               }
               <button
                 className="cta-button connect-wallet-button"
-                onClick={connectWalletFlow}
+                onClick={ connected ? getAccounts : login}
               >
                 { connected ? "Start App!" : "Create Account / Login"}
               </button>
