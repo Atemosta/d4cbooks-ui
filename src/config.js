@@ -22,13 +22,12 @@ const RPC_ENDPOINT = {
 }
 
 
-
 // -----  SLS API Endpoints ----- //
 const SLS_URL = {
   'local': 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev',
   // 'dev': 'https://a18fff4z64.execute-api.us-east-1.amazonaws.com/dev',
   // 'qa': 'TBD',
-  'prod': 'TBD',
+  'prod': 'https://upsvvd5b5d.execute-api.us-east-1.amazonaws.com/prod',
 }
 
 // ----- SLS API Endpoints ----- //
@@ -36,7 +35,7 @@ const WEB3AUTH_CLIENT_ID = {
   'local': 'BOqCiBiWbLsJZl4mtumLTGrTvdJG3NpmF8ZEmbcY8uNx9dm5g-wCgXYBOU7IgEsMQVsACzFT9igoYsfL7d1fjSU',
   // 'dev': 'hBOqCiBiWbLsJZl4mtumLTGrTvdJG3NpmF8ZEmbcY8uNx9dm5g-wCgXYBOU7IgEsMQVsACzFT9igoYsfL7d1fjSU',
   // 'qa': 'BOqCiBiWbLsJZl4mtumLTGrTvdJG3NpmF8ZEmbcY8uNx9dm5g-wCgXYBOU7IgEsMQVsACzFT9igoYsfL7d1fjSU',
-  'prod': 'TBD',
+  'prod': 'BJrvVXL4GJtfsqiHMwVcwPVNmCZYlIXAdRb2KHciaPwonCkPDr1cwW56yC5QwaUW3irR4_xjrzx9tsooK8w1sGU',
 }
 
 export { 
