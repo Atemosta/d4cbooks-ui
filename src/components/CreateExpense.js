@@ -3,9 +3,12 @@ import React, { useState } from "react";
 // External Imports
 import Webcam from "react-webcam";
 
-// Internal Imports
+// Internal API Imports
 import createExpense from "../api/createExpense";
 import updateExpensePhoto from "../api/updateExpensePhoto";
+
+// Internal Component Imports
+import PictureUpload from "./PictureUpload";
 
 // Styles Import
 import "../styles/CreateExpense.css";
@@ -19,6 +22,7 @@ const CreateExpense = ({address, data, setData, setLocation}) => {
   });
   const [loading, setLoading] = useState(false);
   const [imgSrc, setImgSrc] = React.useState(null);
+  const [photoMode, setPhotoMode] = React.useState("camera");
 
   // Setup Webcam Component
   const WebcamCapture = () => {
@@ -68,6 +72,8 @@ const CreateExpense = ({address, data, setData, setLocation}) => {
             <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input">Capture Photo</button>
             <br/>
             <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
+            <br/>
+            <button onClick={(e)=>{ e.preventDefault(); setPhotoMode("upload");}} className="input">Upload Photo</button>
           </div> 
           : 
             <button onClick={(e)=> { e.preventDefault(); reset();}} className="input"> Retake Photo </button>
@@ -82,6 +88,7 @@ const CreateExpense = ({address, data, setData, setLocation}) => {
     if (!newProduct.name || !newProduct.price || !newProduct.expense_type || !newProduct.purchase_source || !imgSrc) {
       alert("Please fill out all fields and capture a photo!");
     } else {
+      console.log(imgSrc)
       try {
         // Submit Current Data
         const expense = newProduct;
@@ -126,7 +133,9 @@ const CreateExpense = ({address, data, setData, setLocation}) => {
 
         <div className="form_container">
           
-          <WebcamCapture/>
+        { (photoMode === "camera") && <WebcamCapture/> }
+        { (photoMode === "upload") && <PictureUpload onPictureSelected={setImgSrc} /> }
+
 
         { (imgSrc) && <div>
           <div className="flex_row">

@@ -15,8 +15,9 @@ import deleteExpense from '../api/deleteExpense';
 import updateExpense from "../api/updateExpense";
 import updateExpensePhoto from "../api/updateExpensePhoto";
 
-// Component Imports
+// Internal Component Imports
 // import LoadingIndicator from './LoadingIndicator';
+import PictureUpload from "./PictureUpload";
 
 // External Imports
 import Webcam from "react-webcam";
@@ -40,6 +41,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
   const [deleteTxn, setDeleteTxn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imgSrc, setImgSrc] = React.useState(null);
+  const [photoMode, setPhotoMode] = React.useState("camera");
   const [retakeMode, setRetakeMode] = React.useState(false);
   const [retakeDialog, setRetakeDialog] = useState(false);
 
@@ -107,10 +109,10 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
           { imgSrc === null 
           ? 
           <div>
-            <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input">Capture Photo</button>
-            <br/>
+            <button onClick={(e)=>{ e.preventDefault(); capture();}} className="input" style={{marginRight: "10px"}} >Capture Photo</button>
             <button onClick={(e)=>{ e.preventDefault(); flip();}} className="input">Switch Camera</button>
             <br/>
+            <button onClick={(e)=>{ e.preventDefault(); setPhotoMode("upload");}} className="input" style={{marginRight: "10px"}}>Upload Photo</button>
             <button onClick={(e)=>{ e.preventDefault(); setRetakeMode(false);}} className="input">Cancel</button>
           </div> 
           : 
@@ -251,7 +253,7 @@ const ViewExpenseDetails = ({address, expenseOld, index, data, setData, open, se
           </header>
           <div className="form_container">
           { (retakeMode) 
-          ? <WebcamCapture/>
+          ? ((photoMode === "camera") && <WebcamCapture/>) || ((photoMode === "upload") && <PictureUpload onPictureSelected={setImgSrc}/>)
           :
             /* Start Form */
             <div>
